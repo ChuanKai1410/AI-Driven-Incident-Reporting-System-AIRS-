@@ -19,6 +19,9 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
+        cache-dependency-path: |
+          server/package-lock.json
+          client/package-lock.json
 
     # 1. Test the Backend (Server)
     - name: Install Backend Dependencies
