@@ -1,3 +1,4 @@
+[![MERN Stack CI](https://github.com/ChuanKai1410/AI-Driven-Incident-Reporting-System-AIRS-/actions/workflows/ci.yml/badge.svg)](https://github.com/ChuanKai1410/AI-Driven-Incident-Reporting-System-AIRS-/actions/workflows/ci.yml)
 # 📦 AI-Driven Incident Reporting System (AIRS)
 
 ### DHL Digital Automation Challenge - Scenario 2
