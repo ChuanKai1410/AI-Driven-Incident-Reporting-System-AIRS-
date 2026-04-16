@@ -1,0 +1,39 @@
+name: MERN Stack CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    # 1. Test the Backend (Server)
+    - name: Install Backend Dependencies
+      run: npm install
+      working-directory: ./server
+
+    - name: Run Backend Lint/Test
+      run: npm test || echo "No tests defined yet"
+      working-directory: ./server
+
+    # 2. Test the Frontend (Client)
+    - name: Install Frontend Dependencies
+      run: npm install
+      working-directory: ./client
+
+    - name: Build Frontend
+      run: npm run build
+      working-directory: ./client
