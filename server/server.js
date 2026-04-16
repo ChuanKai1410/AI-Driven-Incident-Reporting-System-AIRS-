@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 require('dotenv').config();
 
 const app = express();
@@ -25,18 +26,29 @@ const incidentSchema = new mongoose.Schema({
 });
 
 const Incident = mongoose.model('Incident', incidentSchema);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Step 5.4: Network Elements - The REST API Endpoint
 app.post('/api/incidents', async (req, res) => {
   try {
-    const newIncident = new Incident({
-      source: req.body.source,
-      rawContent: req.body.rawContent
-    });
+    const { source, rawContent } = req.body;
+
+    // AI Processing: Summarize messy content
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const prompt = `You are a DHL logistics assistant. Summarize this messy report into a professional 1-sentence incident title and 3 clear bullet points: "${rawContent}"`;
     
+    const result = await model.generateContent(prompt);
+    const cleanSummary = result.response.text();
+
+    const newIncident = new Incident({
+      source,
+      rawContent,
+      cleanSummary, // This is your AI-generated "Structured Article"
+      status: 'Pending'
+    });
+
     await newIncident.save();
-    console.log("New incident logged from UiPath!");
-    res.status(201).json({ message: "Success", id: newIncident._id });
+    res.status(201).json({ message: "Incident logged & summarized!", cleanSummary });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
