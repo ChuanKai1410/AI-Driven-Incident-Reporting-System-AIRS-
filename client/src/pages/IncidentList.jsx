@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Search, List } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function IncidentList() {
   const [incidents, setIncidents] = useState([]);
@@ -140,7 +141,9 @@ function IncidentList() {
                     filteredIncidents.map(inc => (
                       <tr key={inc._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4 font-medium text-slate-900 truncate max-w-[200px]" title={inc.title}>
-                          {inc.title || 'Untitled Incident'}
+                          <Link to={`/incidents/${inc._id}`} className="hover:text-red-600 hover:underline transition-colors">
+                            {inc.title || 'Untitled Incident'}
+                          </Link>
                         </td>
                         <td className="px-6 py-4">{inc.source}</td>
                         <td className="px-6 py-4">{inc.category || '-'}</td>
