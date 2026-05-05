@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, LogIn, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -55,9 +55,9 @@ const Login = () => {
                 <label className="block text-sm font-medium text-slate-700">
                   Password
                 </label>
-                <a href="#" className="text-sm font-medium text-red-600 hover:text-red-500">
+                <button type="button" className="text-sm font-medium text-red-600 hover:text-red-500">
                   Forgot password?
-                </a>
+                </button>
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
