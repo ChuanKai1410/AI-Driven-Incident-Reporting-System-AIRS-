@@ -30,7 +30,15 @@ const incidentSchema = new mongoose.Schema({
 
   embedding: [Number],
 
-  relatedReports: [String],
+  relatedReports: [
+    {
+      source: String,
+      rawContent: String,
+      cleanSummary: String,
+      priority: String,
+      createdAt: { type: Date, default: Date.now }
+    }
+  ],
 
   createdAt: { 
     type: Date, 
