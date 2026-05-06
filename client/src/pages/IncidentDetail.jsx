@@ -11,19 +11,19 @@ function IncidentDetail() {
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
+    const fetchIncident = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/incidents/${id}`);
+        setIncident(res.data);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setLoading(false);
+      }
+    };
+
     fetchIncident();
   }, [id]);
-
-  const fetchIncident = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/incidents/${id}`);
-      setIncident(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-    }
-  };
 
   const handleStatusChange = async (newStatus) => {
     setUpdating(true);
@@ -35,7 +35,7 @@ function IncidentDetail() {
       });
       const res = await fetch(`http://localhost:5000/api/incidents/${id}`);
       const updatedIncident = await res.json();
-      setIncident({ ...incident, status: newStatus });
+      setIncident(updatedIncident);
     } catch (err) {
       console.error(err);
       alert('Failed to update status.');
