@@ -28,6 +28,10 @@ const incidentSchema = new mongoose.Schema({
     default: null
   },
 
+  embedding: [Number],
+
+  relatedReports: [String],
+
   createdAt: { 
     type: Date, 
     default: Date.now 

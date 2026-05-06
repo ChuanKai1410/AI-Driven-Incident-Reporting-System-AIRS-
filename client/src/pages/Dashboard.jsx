@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { LayoutDashboard, AlertCircle, Clock, CheckCircle2, AlertTriangle, FileText } from 'lucide-react';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 function Dashboard() {
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [clusters, setClusters] = useState({});
 
   useEffect(() => {
     // Fetch data from your MERN backend
@@ -17,7 +19,19 @@ function Dashboard() {
         console.error(err);
         setLoading(false);
       });
+
+    fetch('http://localhost:5000/api/incidents/clusters')
+      .then(res => res.json())
+      .then(data => setClusters(data))
+      .catch(err => console.error(err));
   }, []);
+
+  const pieData = Object.entries(clusters).map(([key, value]) => ({
+    name: key,
+    value: value.length
+  }));
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1919'];
 
   const stats = {
     total: incidents.length,
@@ -49,6 +63,41 @@ function Dashboard() {
           <StatCard title="In Progress" value={stats.inProgress} icon={<AlertCircle className="h-6 w-6 text-purple-600" />} bgColor="bg-purple-50" />
           <StatCard title="Resolved" value={stats.resolved} icon={<CheckCircle2 className="h-6 w-6 text-emerald-600" />} bgColor="bg-emerald-50" />
           <StatCard title="Critical Cases" value={stats.critical} icon={<AlertTriangle className="h-6 w-6 text-red-600" />} bgColor="bg-red-50" />
+        </div>
+
+        {/* Cluster Visualization */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Pie Chart */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4 self-start">Cluster Distribution</h2>
+            <PieChart width={400} height={300}>
+              <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </div>
+
+          {/* Cluster List */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-h-[400px] overflow-y-auto">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">Clusters</h2>
+            {Object.entries(clusters).map(([category, incList]) => (
+              <div key={category} className="cluster-card">
+                <h3 className="font-bold text-lg">{category} ({incList.length})</h3>
+                {incList.map(inc => (
+                  <div key={inc._id} className="incident-item">
+                    <strong>{inc.title}</strong>
+                    <p className="text-sm text-gray-600 mt-1">{inc.cleanSummary}</p>
+                    {inc.isDuplicate && (
+                      <span style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px', display: 'block' }}>⚠ Duplicate</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Incident List */}

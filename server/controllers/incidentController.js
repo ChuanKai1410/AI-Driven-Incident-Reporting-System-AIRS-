@@ -4,6 +4,24 @@ const Incident = require("../models/Incident");
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+async function getEmbedding(text) {
+  const model = genAI.getGenerativeModel({
+    model: "embedding-001"
+  });
+
+  const result = await model.embedContent(text);
+
+  return result.embedding.values; // array of numbers
+}
+
+function cosineSimilarity(vecA, vecB) {
+  const dot = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
+  const magA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
+  const magB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
+
+  return dot / (magA * magB);
+}
+
 exports.createIncident = async (req, res) => {
   if (!req.body.rawContent) {
     return res.status(400).json({ 
@@ -28,7 +46,7 @@ exports.createIncident = async (req, res) => {
     // AI Processing: Summarize messy content
     const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
     const prompt = `
-You are a DHL logistics incident analyst.
+You are a DHL incident management AI.
 
 Analyze the following messy incident report and return ONLY valid JSON.
 
@@ -47,29 +65,68 @@ Return this JSON format:
 `;
     
     const result = await model.generateContent(prompt);
-    let responseText = result.response.text().trim();
+    const text = result.response.text();
+    const parsed = JSON.parse(text);
 
-    // Clean up potential markdown formatting from Gemini response
-    if (responseText.startsWith('```json')) {
-      responseText = responseText.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-    } else if (responseText.startsWith('```')) {
-      responseText = responseText.replace(/^```\s*/, '').replace(/\s*```$/, '');
+    const newEmbedding = await getEmbedding(parsed.summary);
+
+    const existingIncidents = await Incident
+      .find({ embedding: { $exists: true } })
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    let isDuplicate = false;
+    let duplicateId = null;
+    let highestScore = 0;
+
+    for (let inc of existingIncidents) {
+      const score = cosineSimilarity(newEmbedding, inc.embedding);
+
+      if (score > highestScore) {
+        highestScore = score;
+      }
+
+      if (score > 0.85) { // 🔥 threshold
+        isDuplicate = true;
+        duplicateId = inc._id;
+        break;
+      }
     }
-
-    const parsedData = JSON.parse(responseText);
 
     const newIncident = new Incident({
       source,
       rawContent: rawContentBody,
-      title: parsedData.title,
-      cleanSummary: parsedData.summary,
-      category: parsedData.category,
-      priority: parsedData.priority,
-      department: parsedData.department,
-      status: 'Pending'
+      title: parsed.title,
+      cleanSummary: parsed.summary,
+      category: parsed.category,
+      priority: parsed.priority,
+      department: parsed.department,
+      status: 'Pending',
+      embedding: newEmbedding,
+      isDuplicate,
+      duplicateOf: duplicateId
     });
 
     await newIncident.save();
+
+    // clustering
+    const cluster = await Incident.find({
+      embedding: { $exists: true }
+    });
+
+    const similarGroup = cluster.filter(inc => {
+      const score = cosineSimilarity(newEmbedding, inc.embedding);
+      return score > 0.8;
+    });
+
+    // auto merge
+    if (isDuplicate) {
+      await Incident.findByIdAndUpdate(duplicateId, {
+        $push: {
+          relatedReports: rawContentBody
+        }
+      });
+    }
     res.status(201).json({ message: "Incident logged & summarized!", incident: newIncident });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -101,33 +158,15 @@ exports.getIncidentById = async (req, res) => {
 };
 
 exports.updateIncidentStatus = async (req, res) => {
-  try {
-    const { status } = req.body;
-    const allowedStatuses = ['Pending', 'In Progress', 'Resolved', 'Rejected'];
+  const { status } = req.body;
 
-    if (!status) {
-      return res.status(400).json({ error: "Status is required" });
-    }
+  const updated = await Incident.findByIdAndUpdate(
+    req.params.id,
+    { status, updatedAt: new Date() },
+    { new: true }
+  );
 
-    if (!allowedStatuses.includes(status)) {
-      return res.status(400).json({ error: "Invalid status value. Allowed values: Pending, In Progress, Resolved, Rejected" });
-    }
-
-    const incident = await Incident.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true, runValidators: true }
-    );
-
-    if (!incident) {
-      return res.status(404).json({ error: "Incident not found" });
-    }
-
-    res.status(200).json({ message: "Incident status updated!", incident });
-  } catch (err) {
-    console.error("Update Error:", err.message);
-    res.status(500).json({ error: "Failed to update incident status" });
-  }
+  res.json(updated);
 };
 
 exports.deleteIncident = async (req, res) => {
@@ -140,5 +179,28 @@ exports.deleteIncident = async (req, res) => {
   } catch (err) {
     console.error("Delete Error:", err.message);
     res.status(500).json({ error: "Failed to delete incident" });
+  }
+};
+
+exports.getClusters = async (req, res) => {
+  try {
+    const incidents = await Incident.find();
+
+    const clusters = {};
+
+    for (let inc of incidents) {
+      const key = inc.category || "Other";
+
+      if (!clusters[key]) {
+        clusters[key] = [];
+      }
+
+      clusters[key].push(inc);
+    }
+
+    res.json(clusters);
+  } catch (err) {
+    console.error("Fetch Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch clusters" });
   }
 };

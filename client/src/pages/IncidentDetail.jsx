@@ -28,7 +28,13 @@ function IncidentDetail() {
   const handleStatusChange = async (newStatus) => {
     setUpdating(true);
     try {
-      await axios.patch(`http://localhost:5000/api/incidents/${id}/status`, { status: newStatus });
+      await fetch(`http://localhost:5000/api/incidents/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      const res = await fetch(`http://localhost:5000/api/incidents/${id}`);
+      const updatedIncident = await res.json();
       setIncident({ ...incident, status: newStatus });
     } catch (err) {
       console.error(err);

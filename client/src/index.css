@@ -15,3 +15,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cluster-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.incident-item {
+  margin-top: 10px;
+  padding: 8px;
+  border-left: 4px solid #007bff;
+  background: white;
+}
