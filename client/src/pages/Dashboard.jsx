@@ -97,7 +97,11 @@ function Dashboard() {
                 <h3 className="font-bold text-lg">{category} ({incList.length})</h3>
                 {incList.map(inc => (
                   <div key={inc._id} className="incident-item">
-                    <strong>{inc.title}</strong>
+                    <strong>
+                      <Link to={`/incidents/${inc._id}`} className="hover:text-red-600 hover:underline transition-colors">
+                        {inc.title || 'Untitled Incident'}
+                      </Link>
+                    </strong>
                     <p className="text-sm text-gray-600 mt-1">{inc.cleanSummary}</p>
                     {inc.isDuplicate && (
                       <span style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px', display: 'block' }}>⚠ Duplicate</span>
@@ -139,7 +143,11 @@ function Dashboard() {
                     incidents.map(inc => (
                       <tr key={inc._id} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4">
-                          <div className="font-medium text-slate-900">{inc.title || 'Untitled Incident'}</div>
+                          <div className="font-medium text-slate-900">
+                            <Link to={`/incidents/${inc._id}`} className="hover:text-red-600 hover:underline transition-colors">
+                              {inc.title || 'Untitled Incident'}
+                            </Link>
+                          </div>
                           <div className="text-xs text-slate-500 mt-1">Source: {inc.source}</div>
                         </td>
                         <td className="px-6 py-4">
