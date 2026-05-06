@@ -110,21 +110,27 @@
   <sap:WorkflowViewStateService.ViewState>
     <scg:Dictionary x:TypeArguments="x:String, x:Object">
       <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+      <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
     </scg:Dictionary>
   </sap:WorkflowViewStateService.ViewState>
   <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="744.4000000000001,1120" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="jsonBody" />
       <Variable x:TypeArguments="x:String" Name="source" />
-      <Variable x:TypeArguments="x:String" Name="filePath">
+      <Variable x:TypeArguments="x:String" Name="filePath" />
+      <Variable x:TypeArguments="s:String[]" Name="files" />
+      <Variable x:TypeArguments="x:String" Name="inputFolder">
         <Variable.Default>
           <Literal x:TypeArguments="x:String">C:\Users\SCSM11\Documents\UTM Y3S2\WT\AI-Driven-Incident-Reporting-System-AIRS-\rpa-uipath\sample-inputs</Literal>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="s:String[]" Name="files" />
-      <Variable x:TypeArguments="x:String" Name="inputFolder" />
       <Variable x:TypeArguments="x:String" Name="rawContent" />
       <Variable x:TypeArguments="x:String" Name="resContent" />
+      <Variable x:TypeArguments="x:String" Name="apiKey">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String">airs_rpa_secret_123</Literal>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -136,7 +142,7 @@
         <OutArgument x:TypeArguments="s:String[]">[files]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="s:String[]">[Directory.GetFiles(inputFolder, "*.txt")]</InArgument>
+        <InArgument x:TypeArguments="s:String[]">[System.IO.Directory.GetFiles(inputFolder, "*.txt")]</InArgument>
       </Assign.Value>
     </Assign>
     <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each filePath" sap:VirtualizedContainerService.HintSize="451.2,922.4" sap2010:WorkflowViewState.IdRef="ForEach`1_2" Values="[files]">
@@ -176,7 +182,9 @@
                 <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
               </ui:HttpClient.Cookies>
               <ui:HttpClient.Headers>
-                <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
+                <InArgument x:TypeArguments="x:String" x:Key="x-api-key">
+                  <VisualBasicValue x:TypeArguments="x:String" ExpressionText="apiKey" />
+                </InArgument>
               </ui:HttpClient.Headers>
               <ui:HttpClient.Parameters>
                 <scg:Dictionary x:TypeArguments="x:String, InArgument(x:String)" />
