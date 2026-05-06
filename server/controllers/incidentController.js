@@ -4,9 +4,30 @@ const Incident = require("../models/Incident");
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+async function generateWithRetry(prompt, retries = 3) {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash"
+  });
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      const result = await model.generateContent(prompt);
+      return result.response.text();
+    } catch (err) {
+      console.log(`Gemini retry ${i + 1} failed:`, err.message);
+
+      if (i === retries - 1) {
+        throw err;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+  }
+}
+
 async function getEmbedding(text) {
   const model = genAI.getGenerativeModel({
-    model: "embedding-001"
+    model: "gemini-embedding-001"
   });
 
   const result = await model.embedContent(text);
@@ -44,7 +65,6 @@ exports.createIncident = async (req, res) => {
     const { source, rawContent: rawContentBody } = req.body;
 
     // AI Processing: Summarize messy content
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
     const prompt = `
 You are a DHL incident management AI.
 
@@ -64,8 +84,7 @@ Return this JSON format:
 }
 `;
     
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    const text = await generateWithRetry(prompt);
     const parsed = JSON.parse(text);
 
     const newEmbedding = await getEmbedding(parsed.summary);
