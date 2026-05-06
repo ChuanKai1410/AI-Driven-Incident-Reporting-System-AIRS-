@@ -111,11 +111,9 @@ Return this JSON format:
       .limit(5);
 
     let isDuplicate = false;
-    let duplicateOf = null;
+    let duplicateId = null;
     let highestScore = 0;
     let bestDuplicate = null;
-
-    const DUPLICATE_THRESHOLD = 0.78;
 
     for (let inc of existingIncidents) {
       if (!inc.embedding || inc.category !== parsed.category) continue;
@@ -128,14 +126,14 @@ Return this JSON format:
       }
     }
 
-    if (highestScore >= DUPLICATE_THRESHOLD) {
+    if (highestScore >= 0.78 && bestDuplicate) {
       isDuplicate = true;
-      duplicateOf = bestDuplicate._id;
+      duplicateId = bestDuplicate._id;
     }
 
     // auto merge logic
-    if (isDuplicate && duplicateOf) {
-      await Incident.findByIdAndUpdate(duplicateOf, {
+    if (isDuplicate && duplicateId) {
+      await Incident.findByIdAndUpdate(duplicateId, {
         $push: {
           relatedReports: {
             source,
@@ -144,12 +142,6 @@ Return this JSON format:
             priority: parsed.priority,
             createdAt: new Date()
           }
-        },
-        $set: {
-          priority:
-            bestDuplicate.priority === "Critical" || parsed.priority === "Critical"
-              ? "Critical"
-              : bestDuplicate.priority
         }
       });
     }
@@ -165,7 +157,7 @@ Return this JSON format:
       status: 'Pending',
       embedding: newEmbedding,
       isDuplicate,
-      duplicateOf
+      duplicateOf: duplicateId
     });
 
     await newIncident.save();
