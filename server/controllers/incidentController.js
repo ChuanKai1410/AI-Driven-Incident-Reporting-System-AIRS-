@@ -43,6 +43,22 @@ function cosineSimilarity(vecA, vecB) {
   return dot / (magA * magB);
 }
 
+function extractJson(text) {
+  const cleaned = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+
+  if (start === -1 || end === -1) {
+    throw new Error("No valid JSON object found in Gemini response");
+  }
+
+  return cleaned.substring(start, end + 1);
+}
+
 exports.createIncident = async (req, res) => {
   if (!req.body.rawContent) {
     return res.status(400).json({ 
@@ -85,7 +101,7 @@ Return this JSON format:
 `;
     
     const text = await generateWithRetry(prompt);
-    const parsed = JSON.parse(text);
+    const parsed = JSON.parse(extractJson(text));
 
     const newEmbedding = await getEmbedding(parsed.summary);
 
