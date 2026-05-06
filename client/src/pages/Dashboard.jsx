@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { LayoutDashboard, AlertCircle, Clock, CheckCircle2, AlertTriangle, FileText } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
@@ -10,9 +10,7 @@ function Dashboard() {
 
   useEffect(() => {
     // Fetch data from your MERN backend
-    axios.get('http://localhost:5000/api/incidents', {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    })
+    api.get('/api/incidents')
       .then(res => {
         setIncidents(res.data);
         setLoading(false);
@@ -22,11 +20,8 @@ function Dashboard() {
         setLoading(false);
       });
 
-    fetch('http://localhost:5000/api/incidents/clusters', {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    })
-      .then(res => res.json())
-      .then(data => setClusters(data))
+    api.get('/api/incidents/clusters')
+      .then(res => setClusters(res.data))
       .catch(err => console.error(err));
   }, []);
 

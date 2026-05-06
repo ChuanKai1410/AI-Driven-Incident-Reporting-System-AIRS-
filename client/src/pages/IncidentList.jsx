@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Search, List } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -14,9 +14,7 @@ function IncidentList() {
   const [priorityFilter, setPriorityFilter] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/incidents', {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    })
+    api.get('/api/incidents')
       .then(res => {
         setIncidents(res.data);
         setLoading(false);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2 } from 'lucide-react';
 
 function IncidentDetail() {
@@ -13,9 +13,7 @@ function IncidentDetail() {
   useEffect(() => {
     const fetchIncident = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/incidents/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
+        const res = await api.get(`/api/incidents/${id}`);
         setIncident(res.data);
         setLoading(false);
       } catch (err) {
@@ -30,19 +28,9 @@ function IncidentDetail() {
   const handleStatusChange = async (newStatus) => {
     setUpdating(true);
     try {
-      await fetch(`http://localhost:5000/api/incidents/${id}/status`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify({ status: newStatus })
-      });
-      const res = await fetch(`http://localhost:5000/api/incidents/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      const updatedIncident = await res.json();
-      setIncident(updatedIncident);
+      await api.patch(`/api/incidents/${id}/status`, { status: newStatus });
+      const res = await api.get(`/api/incidents/${id}`);
+      setIncident(res.data);
     } catch (err) {
       console.error(err);
       alert('Failed to update status.');
