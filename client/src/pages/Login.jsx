@@ -7,11 +7,26 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Simulate login for now
-    if (email && password) {
-      navigate('/dashboard');
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        const errData = await res.json();
+        alert(errData.message || "Invalid credentials");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error, please try again later.");
     }
   };
 

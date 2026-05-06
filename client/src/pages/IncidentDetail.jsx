@@ -13,7 +13,9 @@ function IncidentDetail() {
   useEffect(() => {
     const fetchIncident = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/incidents/${id}`);
+        const res = await axios.get(`http://localhost:5000/api/incidents/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
         setIncident(res.data);
         setLoading(false);
       } catch (err) {
@@ -30,10 +32,15 @@ function IncidentDetail() {
     try {
       await fetch(`http://localhost:5000/api/incidents/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
         body: JSON.stringify({ status: newStatus })
       });
-      const res = await fetch(`http://localhost:5000/api/incidents/${id}`);
+      const res = await fetch(`http://localhost:5000/api/incidents/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
       const updatedIncident = await res.json();
       setIncident(updatedIncident);
     } catch (err) {

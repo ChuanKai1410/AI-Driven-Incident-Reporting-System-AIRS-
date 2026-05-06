@@ -10,7 +10,9 @@ function Dashboard() {
 
   useEffect(() => {
     // Fetch data from your MERN backend
-    axios.get('http://localhost:5000/api/incidents')
+    axios.get('http://localhost:5000/api/incidents', {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
       .then(res => {
         setIncidents(res.data);
         setLoading(false);
@@ -20,7 +22,9 @@ function Dashboard() {
         setLoading(false);
       });
 
-    fetch('http://localhost:5000/api/incidents/clusters')
+    fetch('http://localhost:5000/api/incidents/clusters', {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
       .then(res => res.json())
       .then(data => setClusters(data))
       .catch(err => console.error(err));

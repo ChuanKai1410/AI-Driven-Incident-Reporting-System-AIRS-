@@ -14,7 +14,9 @@ function IncidentList() {
   const [priorityFilter, setPriorityFilter] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/incidents')
+    axios.get('http://localhost:5000/api/incidents', {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
       .then(res => {
         setIncidents(res.data);
         setLoading(false);
