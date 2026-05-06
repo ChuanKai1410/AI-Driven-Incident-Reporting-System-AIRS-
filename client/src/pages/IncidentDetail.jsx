@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api';
+import Navbar from '../components/Navbar';
 import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2 } from 'lucide-react';
 
 function IncidentDetail() {
@@ -56,7 +57,9 @@ function IncidentDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-4xl mx-auto space-y-6">
         
         {/* Navigation & Header */}
@@ -132,6 +135,7 @@ function IncidentDetail() {
 
       </div>
     </div>
+    </>
   );
 }
 

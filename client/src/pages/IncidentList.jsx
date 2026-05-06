@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
+import Navbar from '../components/Navbar';
 import { Search, List } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -39,7 +40,9 @@ function IncidentList() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* Header */}
@@ -167,6 +170,7 @@ function IncidentList() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

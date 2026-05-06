@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
+import Navbar from '../components/Navbar';
+import { Link } from 'react-router-dom';
 import { LayoutDashboard, AlertCircle, Clock, CheckCircle2, AlertTriangle, FileText } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
@@ -41,7 +43,9 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8">
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Header */}
@@ -53,6 +57,12 @@ function Dashboard() {
             </h1>
             <p className="text-slate-500 mt-1">Real-time overview of automated incident reports</p>
           </div>
+          <Link
+            to="/incidents"
+            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+          >
+            View All Incidents
+          </Link>
         </div>
 
         {/* Stats Grid */}
@@ -153,6 +163,7 @@ function Dashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
