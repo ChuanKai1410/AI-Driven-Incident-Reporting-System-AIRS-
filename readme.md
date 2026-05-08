@@ -82,7 +82,7 @@ The intelligence layer is powered by:
 🧠 **AI Summarization**
 
 Transforms messy operational reports into structured incident briefings.
----
+
 
 🏷️ **Intelligent Classification**
 
@@ -91,27 +91,27 @@ Automatically extracts:
 - Category
 - Priority
 - Suggested Department
----
+
 
 🔍 **Embedding Generation**
 
 Gemini embeddings are generated for semantic understanding.
----
+
 
 🔁 **Duplicate Detection**
 
 Cosine similarity compares incident embeddings to detect repeated operational cases.
----
+
 
 🔗 **Automatic Incident Consolidation**
 
 Duplicate incidents are merged into unified tickets with related report tracking.
----
+
 
 📊 **Semantic Clustering**
 
 Embedding similarity groups related incidents into operational trend clusters.
----
+
 
 ### 3. Management Layer (Frontend - React)
 A secure React dashboard provides centralized incident management and operational intelligence visualization.
@@ -142,7 +142,7 @@ A secure React dashboard provides centralized incident management and operationa
 
 ## 🤖 AI Features
 
-**🧠 AI Incident Briefing**
+### 🧠 AI Incident Briefing
 Messy operational reports are transformed into concise point-form operational summaries.
 
 Example:
@@ -151,9 +151,9 @@ Example:
 - Address update request was not applied
 - Customer claims parcel missing
 - Escalation required for operations team
----
 
-**🔍 Semantic Similarity Detection**
+
+### 🔍 Semantic Similarity Detection
 
 Instead of relying on keyword matching, AIRS uses embeddings and cosine similarity to understand the semantic meaning of incidents.
 
@@ -163,9 +163,9 @@ This enables the system to identify:
 - Similar customer complaints
 - Related warehouse incidents
 - Operational failure patterns
----
 
-**🔗 Automatic Duplicate Consolidation**
+
+### 🔗 Automatic Duplicate Consolidation
 Repeated reports are automatically merged into a single operational incident.
 
 Before:
@@ -176,9 +176,9 @@ COD Complaint
 After:
 COD Complaint
 └── Related Reports (3)
----
 
-**📊 AI Operational Clustering**
+
+### 📊 AI Operational Clustering
 Incidents are grouped using embedding similarity to identify operational trends and recurring issue patterns.
 
 Example:
