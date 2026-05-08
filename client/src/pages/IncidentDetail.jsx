@@ -102,6 +102,15 @@ function IncidentDetail() {
           </div>
         )}
 
+        {/* Consolidated Warning */}
+        {incident.relatedReports?.length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-sm">
+            <p className="text-blue-800 text-sm font-medium">
+              This incident has been automatically consolidated from multiple duplicate reports.
+            </p>
+          </div>
+        )}
+
         {/* Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <InfoCard icon={<Tag className="h-5 w-5 text-blue-500" />} label="Category" value={incident.category || 'Uncategorized'} />
@@ -134,19 +143,47 @@ function IncidentDetail() {
         </div>
 
         {incident.relatedReports?.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col mt-6">
-            <div className="px-6 py-4 border-b border-slate-200 bg-indigo-50/50 flex items-center gap-2">
-              <Bot className="h-5 w-5 text-indigo-600" />
-              <h2 className="text-lg font-semibold text-slate-800">Related Reports ({incident.relatedReports.length})</h2>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+            
+            <div className="px-6 py-4 border-b border-slate-200 bg-red-50/50">
+              <h2 className="text-lg font-semibold text-slate-800">
+                Related Reports ({incident.relatedReports.length})
+              </h2>
+              <p className="text-sm text-slate-500 mt-1">
+                AI-merged duplicate incident submissions
+              </p>
             </div>
-            <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
+
+            <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
               {incident.relatedReports.map((report, index) => (
-                <div key={index} className="p-4 bg-slate-50 rounded-lg border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                  <p className="text-sm font-semibold text-slate-800 mb-2 flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-slate-500" />
-                    {report.source}
-                  </p>
-                  <p className="text-slate-600 text-sm leading-relaxed">{report.cleanSummary}</p>
+                <div
+                  key={index}
+                  className="p-6 hover:bg-slate-50 transition-colors"
+                >
+                  
+                  <div className="flex items-center justify-between mb-3">
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-slate-800">
+                        #{index + 1}
+                      </span>
+
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                        {report.source}
+                      </span>
+                    </div>
+
+                    <span className="text-xs text-slate-400">
+                      {new Date(report.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                      {report.cleanSummary}
+                    </p>
+                  </div>
+
                 </div>
               ))}
             </div>
