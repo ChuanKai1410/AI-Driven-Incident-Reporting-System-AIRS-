@@ -82,6 +82,7 @@ The intelligence layer is powered by:
 🧠 **AI Summarization**
 
 Transforms messy operational reports into structured incident briefings.
+---
 
 🏷️ **Intelligent Classification**
 
@@ -90,22 +91,27 @@ Automatically extracts:
 - Category
 - Priority
 - Suggested Department
+---
 
 🔍 **Embedding Generation**
 
 Gemini embeddings are generated for semantic understanding.
+---
 
 🔁 **Duplicate Detection**
 
 Cosine similarity compares incident embeddings to detect repeated operational cases.
+---
 
 🔗 **Automatic Incident Consolidation**
 
 Duplicate incidents are merged into unified tickets with related report tracking.
+---
 
 📊 **Semantic Clustering**
 
 Embedding similarity groups related incidents into operational trend clusters.
+---
 
 ### 3. Management Layer (Frontend - React)
 A secure React dashboard provides centralized incident management and operational intelligence visualization.
@@ -123,23 +129,14 @@ A secure React dashboard provides centralized incident management and operationa
 
 ## 🔄 End-to-End Workflow
 
-UiPath RPA 
-     ↓ 
-Raw Incident Collection
-     ↓ 
-Express API 
-     ↓ 
-Gemini AI Processing 
-     ↓
-Classification + Embeddings 
-     ↓ 
-Cosine Similarity Detection 
-     ↓ 
-Duplicate Consolidation
-     ↓ 
-MongoDB Storage 
-     ↓ 
-React Operational Dashboard
+1. UiPath ingests raw operational incident data
+2. Backend API receives incident payload
+3. Gemini AI extracts structured operational intelligence
+4. Embeddings are generated for semantic comparison
+5. Cosine similarity identifies related incidents
+6. Duplicate incidents are automatically consolidated
+7. MongoDB stores structured operational records
+8. React dashboard visualizes incidents and AI clusters
 
 ---
 
@@ -154,6 +151,7 @@ Example:
 - Address update request was not applied
 - Customer claims parcel missing
 - Escalation required for operations team
+---
 
 **🔍 Semantic Similarity Detection**
 
@@ -165,6 +163,7 @@ This enables the system to identify:
 - Similar customer complaints
 - Related warehouse incidents
 - Operational failure patterns
+---
 
 **🔗 Automatic Duplicate Consolidation**
 Repeated reports are automatically merged into a single operational incident.
@@ -177,6 +176,7 @@ COD Complaint
 After:
 COD Complaint
 └── Related Reports (3)
+---
 
 **📊 AI Operational Clustering**
 Incidents are grouped using embedding similarity to identify operational trends and recurring issue patterns.
@@ -189,22 +189,19 @@ Example:
 
 ---
 
-
 ## 📸 Screenshots
 
-> *(Add your screenshots here for maximum impact)*
-
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./images/Dashboard.png)
 
 ### Incident Details
-![Details](./screenshots/details.png)
+![IncidentList](./images/IncidentList.png)
 
 ### Cluster Visualization
-![Cluster](./screenshots/cluster.png)
+![IncidentDetails](./images/IncidentDetail.png)
 
 ### UiPath Workflow
-![UiPath](./screenshots/uipath.png)
+![UiPath](./images/rpa-uipath.png)
 
 ---
 
@@ -285,8 +282,7 @@ To link the RPA collector to the web dashboard:
 client/         → React frontend dashboard
 server/         → Express backend + AI engine
 rpa-uipath/     → UiPath automation workflows
-images/         → Architecture diagrams
-screenshots/    → System screenshots
+images/         → Architecture diagrams + System screenshots
 ```
 
 ---
