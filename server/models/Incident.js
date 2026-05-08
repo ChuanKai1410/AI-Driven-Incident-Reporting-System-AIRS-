@@ -5,7 +5,7 @@ const incidentSchema = new mongoose.Schema({
   rawContent: String,
 
   title: String,
-  cleanSummary: String,
+  cleanSummary: [String],
 
   category: String,        // Delivery Delay, Damaged Parcel, Address Issue, System Error, Complaint
   priority: String,        // Low, Medium, High, Critical
@@ -34,7 +34,7 @@ const incidentSchema = new mongoose.Schema({
     {
       source: String,
       rawContent: String,
-      cleanSummary: String,
+      cleanSummary: [String],
       priority: String,
       createdAt: { type: Date, default: Date.now }
     }

@@ -92,12 +92,20 @@ Raw report:
 Return this JSON format:
 {
   "title": "short professional incident title",
-  "summary": "clean and professional summary",
+  "summary": [
+    "key operational point 1",
+    "key operational point 2",
+    "key operational point 3"
+  ],
   "category": "Delivery Delay | Address Issue | Damaged Parcel | System Error | Customer Complaint | Other",
   "priority": "Low | Medium | High | Critical",
   "department": "Customer Support | Warehouse | Delivery Operations | IT Support | Claims Department",
   "reason": "short reason for the classification"
 }
+IMPORTANT:
+- summary must be concise operational bullet points
+- each point must be short and actionable
+- do not return paragraph format
 `;
     
     const text = await generateWithRetry(prompt);
@@ -147,7 +155,7 @@ Return this JSON format:
             }
           }
         },
-        { new: true }
+        { returnDocument: "after" }
       );
 
       return res.status(200).json({
@@ -218,7 +226,7 @@ exports.updateIncidentStatus = async (req, res) => {
   const updated = await Incident.findByIdAndUpdate(
     req.params.id,
     { status, updatedAt: new Date() },
-    { new: true }
+    { returnDocument: "after" }
   );
 
   res.json(updated);

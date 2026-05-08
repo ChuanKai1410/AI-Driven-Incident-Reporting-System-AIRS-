@@ -125,8 +125,23 @@ function IncidentDetail() {
               <Bot className="h-5 w-5 text-emerald-600" />
               <h2 className="text-lg font-semibold text-slate-800">AI Clean Summary</h2>
             </div>
-            <div className="p-6 text-slate-700 leading-relaxed flex-1 whitespace-pre-wrap">
-              {incident.cleanSummary || 'No summary available.'}
+            <div className="p-6 flex-1">
+              {Array.isArray(incident.cleanSummary) ? (
+                <ul className="space-y-3 list-disc list-inside">
+                  {incident.cleanSummary.map((point, index) => (
+                    <li
+                      key={index}
+                      className="text-slate-700 leading-relaxed"
+                    >
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                  {incident.cleanSummary || 'No summary available.'}
+                </p>
+              )}
             </div>
           </div>
 
@@ -179,9 +194,17 @@ function IncidentDetail() {
                   </div>
 
                   <div className="bg-slate-50 rounded-lg p-4">
-                    <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                      {report.cleanSummary}
-                    </p>
+                    {Array.isArray(report.cleanSummary) ? (
+                      <ul className="space-y-2 list-disc list-inside text-sm text-slate-700">
+                        {report.cleanSummary.map((point, i) => (
+                          <li key={i} className="leading-relaxed">{point}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                        {report.cleanSummary}
+                      </p>
+                    )}
                   </div>
 
                 </div>
