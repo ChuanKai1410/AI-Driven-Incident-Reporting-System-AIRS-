@@ -5,26 +5,46 @@
 
 ---
 
-## 📖 Project Overview
+## 📖 Overview
 
-AIRS is an intelligent automation platform designed to solve DHL's challenge of handling fragmented and unstructured incident reports.
+AIRS (AI-Driven Incident Reporting System) is an intelligent automation platform developed to address DHL’s operational challenge of handling fragmented and unstructured incident reports across multiple communication channels.
 
-Customer support teams receive incident data from multiple inconsistent sources such as emails, WhatsApp messages, call logs and handwritten notes. This leads to poor visibility, duplicated work, incorrect routing and slow response times.
+Customer support and operations teams often receive incident information from inconsistent sources such as:
 
-AIRS addresses this by integrating **Robotic Process Automation (RPA)** with **Artificial Intelligence (AI)** to automatically transform messy raw inputs into structured, actionable incident records with real-time tracking and analysis.
+- Emails
+- WhatsApp messages
+- Call center notes
+- Warehouse handwritten instructions
+- Internal operational communications
+
+These reports are frequently incomplete, duplicated and difficult to track, leading to:
+
+- Slow response times
+- Incorrect incident routing
+- Duplicate ticket creation
+- Poor operational visibility
+- Inconsistent customer service quality
+
+AIRS solves this problem by integrating:
+
+- 🤖 Robotic Process Automation (UiPath)
+- 🧠 Artificial Intelligence (Google Gemini)
+- 🌐 MERN Stack Web Dashboard
+- 🔍 Semantic Similarity Analysis using Embeddings
+
+The system transforms messy operational data into structured, actionable and trackable incident intelligence.
 
 ---
 
-## 🎯 Solution Overview
+## 🎯 Key Objectives
 
-AIRS automates the full incident lifecycle:
-
-- 📥 Collects raw data via UiPath (RPA)
-- 🧠 Uses Google Gemini AI to extract structured insights
-- 🏷️ Classifies incidents by category, priority and department
-- 🔁 Detects duplicate incidents using semantic similarity
-- 📊 Groups incidents into clusters for pattern analysis
-- 📋 Provides a web dashboard for management and tracking
+- Automate ingestion of unstructured operational reports
+- Extract actionable incident intelligence using AI
+- Classify incidents by category, priority and department
+- Detect duplicate incidents using semantic similarity
+- Consolidate repeated reports into unified cases
+- Visualize operational trends through AI clustering
+- Provide a centralized workflow management dashboard
 
 ---
 
@@ -35,75 +55,140 @@ AIRS automates the full incident lifecycle:
 The system follows a three-layer architecture:
 
 ### 1. Ingestion Layer (RPA - UiPath)
-- Automated bots read raw `.txt` inputs simulating real DHL channels
-- Sends structured requests to backend API
+UiPath bots automate the collection of raw operational reports from simulated DHL communication channels.
+
+**Responsibilities**
+- Read raw .txt reports
+- Simulate real-world operational channels
+- Convert inputs into API-ready payloads
+- Send incident data to backend API
+
+**Simulated Sources**
+- Customer Emails
+- WhatsApp Complaints
+- Warehouse Notes
+- Support Call Logs
+- Internal Operations Messages
 
 ### 2. Intelligence Layer (Backend + AI)
-- Node.js + Express API
-- Google Gemini:
-  - Incident summarization
-  - Classification (category, priority, department)
-  - Embedding generation for similarity detection
-- MongoDB stores structured incident data
+The intelligence layer is powered by:
+
+- Node.js
+- Express.js
+- Google Gemini AI
+- MongoDB
+
+#### AI Capabilities
+🧠 **AI Summarization**
+
+Transforms messy operational reports into structured incident briefings.
+
+🏷️ **Intelligent Classification**
+
+Automatically extracts:
+
+- Category
+- Priority
+- Suggested Department
+
+🔍 **Embedding Generation**
+
+Gemini embeddings are generated for semantic understanding.
+
+🔁 **Duplicate Detection**
+
+Cosine similarity compares incident embeddings to detect repeated operational cases.
+
+🔗 **Automatic Incident Consolidation**
+
+Duplicate incidents are merged into unified tickets with related report tracking.
+
+📊 **Semantic Clustering**
+
+Embedding similarity groups related incidents into operational trend clusters.
 
 ### 3. Management Layer (Frontend - React)
-- Secure web dashboard
+A secure React dashboard provides centralized incident management and operational intelligence visualization.
+
+**Features**
 - Incident workflow tracking
-- Search, filter and visualization
-- Cluster-based grouping of incidents
+- Search and filtering
+- AI-generated summaries
+- Semantic cluster visualization
+- Duplicate incident monitoring
+- Related report consolidation
+- Real-time operational visibility
 
 ---
 
 ## 🔄 End-to-End Workflow
 
-1. UiPath reads unstructured incident reports from files
-2. Data is sent to backend via REST API
-3. Gemini AI:
-   - Generates structured summary
-   - Extracts key metadata
-4. Embeddings are generated for semantic comparison
-5. System detects duplicate incidents using cosine similarity
-6. Incidents are stored in MongoDB
-7. React dashboard displays:
-   - Incident list
-   - Status workflow
-   - Cluster visualization
+UiPath RPA 
+     ↓ 
+Raw Incident Collection
+     ↓ 
+Express API 
+     ↓ 
+Gemini AI Processing 
+     ↓
+Classification + Embeddings 
+     ↓ 
+Cosine Similarity Detection 
+     ↓ 
+Duplicate Consolidation
+     ↓ 
+MongoDB Storage 
+     ↓ 
+React Operational Dashboard
 
 ---
 
-## 🤖 AI Capabilities
+## 🤖 AI Features
 
-- 🧠 Automatic incident summarization
-- 🏷️ Intelligent classification (category, priority, department)
-- 🔁 Duplicate detection using semantic similarity
-- 📊 Cluster visualization of related incidents
+**🧠 AI Incident Briefing**
+Messy operational reports are transformed into concise point-form operational summaries.
+
+Example:
+
+- Parcel delivered to outdated address
+- Address update request was not applied
+- Customer claims parcel missing
+- Escalation required for operations team
+
+**🔍 Semantic Similarity Detection**
+
+Instead of relying on keyword matching, AIRS uses embeddings and cosine similarity to understand the semantic meaning of incidents.
+
+This enables the system to identify:
+
+- Duplicate operational cases
+- Similar customer complaints
+- Related warehouse incidents
+- Operational failure patterns
+
+**🔗 Automatic Duplicate Consolidation**
+Repeated reports are automatically merged into a single operational incident.
+
+Before:
+COD Complaint
+COD Complaint
+COD Complaint
+
+After:
+COD Complaint
+└── Related Reports (3)
+
+**📊 AI Operational Clustering**
+Incidents are grouped using embedding similarity to identify operational trends and recurring issue patterns.
+
+Example:
+
+- Address-related operational failures
+- Repeated warehouse handling issues
+- Recurring COD disputes
 
 ---
 
-## 🚀 Core Features
-
-- 🤖 **Automated Ingestion (UiPath RPA)**  
-  Collects raw incident data from multiple simulated sources
-
-- 🧠 **AI-Powered Processing (Gemini)**  
-  Converts messy input into structured incident records
-
-- 🔁 **Duplicate Detection (AI + Embeddings)**  
-  Uses semantic similarity to identify repeated issues
-
-- 📊 **Cluster Visualization**  
-  Groups incidents by category for better insights
-
-- 🛡️ **Secured Dashboard**  
-  Centralized platform for managing incidents
-
-- ⚡ **Workflow Tracking**  
-  Status management (Pending → In Progress → Resolved)
-
-- 🔍 **Search & Filtering**  
-  Quickly find incidents by keywords or category
-
----
 
 ## 📸 Screenshots
 
@@ -125,12 +210,16 @@ The system follows a three-layer architecture:
 
 ## ⚙️ Tech Stack
 
-- **Frontend:** React.js  
-- **Backend:** Node.js, Express.js  
-- **Database:** MongoDB  
-- **AI:** Google Gemini API (LLM + Embedding)  
-- **RPA:** UiPath Studio  
-- **CI/CD:** GitHub Actions  
+| Layer | Technology |
+|---|---|
+| Frontend | React.js |
+| Backend | Node.js + Express.js |
+| Database | MongoDB Atlas |
+| AI Engine | Google Gemini API |
+| Embeddings | Gemini Embedding Model |
+| RPA | UiPath Studio |
+| Authentication | JWT |
+| CI/CD | GitHub Actions | 
 
 ---
 
@@ -167,6 +256,9 @@ node server.js
 ```env
 MONGO_URI=your_mongo_uri
 GEMINI_API_KEY=your_gemini_api_key
+PORT=5000
+JWT_SECRET=your_jwt_secret
+RPA_API_KEY=your_rpa_api_key
 ```
 
 **Terminal 2 (Client):**
@@ -190,19 +282,23 @@ To link the RPA collector to the web dashboard:
 
 ## 📂 Project Structure
 ```bash
-- client/        → React frontend
-- server/        → Node.js backend + AI processing
-- rpa-uipath/    → UiPath automation workflows
+client/         → React frontend dashboard
+server/         → Express backend + AI engine
+rpa-uipath/     → UiPath automation workflows
+images/         → Architecture diagrams
+screenshots/    → System screenshots
 ```
 
 ---
 
 ## 🚀 Future Improvements
-- Integration with real email and Google Drive APIs
-- Real-time analytics dashboard
-- Vector database integration (e.g., Pinecone)
-- Advanced clustering visualization (2D embedding maps)
-- AI-based incident recommendation system
+- Real email integration (Outlook/Gmail APIs)
+- Google Drive ingestion
+- Real-time operational analytics
+- Advanced vector database integration
+- AI recommendation engine
+- Interactive embedding visualization
+- Predictive operational risk analysis
 
 ---
 

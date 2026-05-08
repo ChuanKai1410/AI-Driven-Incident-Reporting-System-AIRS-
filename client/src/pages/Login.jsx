@@ -31,7 +31,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="p-8">
           {/* Logo & Header */}
@@ -87,6 +87,13 @@ const Login = () => {
                   required
                 />
               </div>
+            </div>
+
+            {/* Demo Credentials Text */}
+            <div className="text-center text-xs text-slate-400 py-2 space-y-1">
+              <p className="font-medium text-slate-500">Demo Access</p>
+              <p>Email: admin@dhl.com</p>
+              <p>Password: admin123</p>
             </div>
 
             {/* Submit Button */}
