@@ -168,6 +168,7 @@ This enables the system to identify:
 ### 🔗 Automatic Duplicate Consolidation
 Repeated reports are automatically merged into a single operational incident.
 
+```bash
 Before:
 COD Complaint
 COD Complaint
@@ -176,6 +177,7 @@ COD Complaint
 After:
 COD Complaint
 └── Related Reports (3)
+```
 
 
 ### 📊 AI Operational Clustering
