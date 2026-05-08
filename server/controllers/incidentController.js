@@ -239,23 +239,58 @@ exports.deleteIncident = async (req, res) => {
 
 exports.getClusters = async (req, res) => {
   try {
-    const incidents = await Incident.find();
+    const incidents = await Incident.find({
+      embedding: { $exists: true, $ne: [] }
+    }).sort({ createdAt: -1 });
 
-    const clusters = {};
+    const visited = new Set();
+    const clusters = [];
 
-    for (let inc of incidents) {
-      const key = inc.category || "Other";
+    for (let i = 0; i < incidents.length; i++) {
+      const base = incidents[i];
 
-      if (!clusters[key]) {
-        clusters[key] = [];
+      if (visited.has(base._id.toString())) continue;
+
+      const group = [base];
+      visited.add(base._id.toString());
+
+      for (let j = i + 1; j < incidents.length; j++) {
+        const compare = incidents[j];
+
+        if (visited.has(compare._id.toString())) continue;
+        if (!base.embedding || !compare.embedding) continue;
+
+        const score = cosineSimilarity(base.embedding, compare.embedding);
+
+        if (score >= 0.75) {
+          group.push({
+            ...compare.toObject(),
+            similarityScore: score
+          });
+
+          visited.add(compare._id.toString());
+        }
       }
 
-      clusters[key].push(inc);
+      clusters.push({
+        clusterName: `${base.category || "Other"} Pattern`,
+        clusterType: "Embedding Similarity Cluster",
+        representativeIncident: base,
+        incidentCount: group.length,
+        averageSimilarity:
+          group.length > 1
+            ? group
+                .slice(1)
+                .reduce((sum, inc) => sum + (inc.similarityScore || 1), 0) /
+              (group.length - 1)
+            : 1,
+        incidents: group
+      });
     }
 
     res.json(clusters);
   } catch (err) {
-    console.error("Fetch Error:", err.message);
-    res.status(500).json({ error: "Failed to fetch clusters" });
+    console.error("Cluster Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch semantic clusters" });
   }
 };

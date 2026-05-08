@@ -8,7 +8,7 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 function Dashboard() {
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [clusters, setClusters] = useState({});
+  const [clusters, setClusters] = useState([]);
 
   useEffect(() => {
     // Fetch data from your MERN backend
@@ -27,9 +27,9 @@ function Dashboard() {
       .catch(err => console.error(err));
   }, []);
 
-  const pieData = Object.entries(clusters).map(([key, value]) => ({
-    name: key,
-    value: value.length
+  const pieData = clusters.map(cluster => ({
+    name: cluster.clusterName,
+    value: cluster.incidentCount
   }));
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1919'];
@@ -75,10 +75,19 @@ function Dashboard() {
         </div>
 
         {/* Cluster Visualization */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Pie Chart */}
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center">
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 self-start">Cluster Distribution</h2>
+        <div>
+          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
+            <h3 className="font-semibold text-purple-900">
+              AI Semantic Clustering
+            </h3>
+            <p className="text-sm text-purple-700 mt-1">
+              Incidents are grouped using Gemini embeddings and cosine similarity, allowing the system to detect related operational patterns beyond simple category labels.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Pie Chart */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center">
+              <h2 className="text-lg font-semibold text-slate-800 mb-4 self-start">Semantic Cluster Distribution</h2>
             <PieChart width={400} height={300}>
               <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
                 {pieData.map((entry, index) => (
@@ -90,28 +99,88 @@ function Dashboard() {
           </div>
 
           {/* Cluster List */}
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-h-[400px] overflow-y-auto">
-            <h2 className="text-lg font-semibold text-slate-800 mb-4">Clusters</h2>
-            {Object.entries(clusters).map(([category, incList]) => (
-              <div key={category} className="cluster-card">
-                <h3 className="font-bold text-lg">{category} ({incList.length})</h3>
-                {incList.map(inc => (
-                  <div key={inc._id} className="incident-item">
-                    <strong>
-                      <Link to={`/incidents/${inc._id}`} className="hover:text-red-600 hover:underline transition-colors">
-                        {inc.title || 'Untitled Incident'}
-                      </Link>
-                    </strong>
-                    <p className="text-sm text-gray-600 mt-1">{inc.cleanSummary}</p>
-                    {inc.isDuplicate && (
-                      <span style={{ color: 'red', fontSize: '0.875rem', marginTop: '4px', display: 'block' }}>⚠ Duplicate</span>
-                    )}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-h-[600px] overflow-y-auto">
+            <h2 className="text-lg font-semibold text-slate-800 mb-4">AI Embedding-Based Incident Clusters</h2>
+            {clusters.map((cluster, index) => (
+              <div
+                key={index}
+                className="border border-slate-200 rounded-xl p-5 mb-4 bg-white hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-bold text-lg text-slate-800">
+                      {cluster.clusterName}
+                    </h3>
+
+                    <p className="text-sm text-slate-500">
+                      {cluster.incidentCount} semantically similar incidents detected
+                    </p>
                   </div>
-                ))}
+
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
+                    Embedding Cluster
+                  </span>
+                </div>
+
+                <div className="mb-4">
+                  <p className="text-xs text-slate-500 mb-1">Average Similarity</p>
+                  <div className="w-full bg-slate-100 rounded-full h-2">
+                    <div
+                      className="bg-purple-500 h-2 rounded-full"
+                      style={{ width: `${Math.round(cluster.averageSimilarity * 100)}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {Math.round(cluster.averageSimilarity * 100)}% semantic similarity
+                  </p>
+                </div>
+
+                <div className="bg-slate-50 rounded-lg p-3 mb-3">
+                  <p className="text-xs font-semibold text-slate-500 uppercase mb-1">
+                    Representative Incident
+                  </p>
+                  <p className="text-sm font-medium text-slate-800">
+                    <Link to={`/incidents/${cluster.representativeIncident?._id}`} className="hover:text-red-600 hover:underline transition-colors">
+                      {cluster.representativeIncident?.title || "Untitled Incident"}
+                    </Link>
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  {cluster.incidents.map((inc, i) => (
+                    <div
+                      key={inc._id || i}
+                      className="p-3 border border-slate-100 rounded-lg bg-slate-50"
+                    >
+                      <div className="flex justify-between gap-3">
+                        <Link to={`/incidents/${inc._id}`} className="text-sm font-medium text-slate-800 hover:text-red-600 hover:underline transition-colors">
+                          {inc.title || "Untitled Incident"}
+                        </Link>
+
+                        {inc.similarityScore && (
+                          <span className="text-xs text-purple-700 font-semibold">
+                            {Math.round(inc.similarityScore * 100)}%
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                        {inc.cleanSummary}
+                      </p>
+                      
+                      {inc.isDuplicate && (
+                        <span className="text-xs text-red-500 font-medium mt-1 block flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3" /> Duplicate
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
         {/* Incident List */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
