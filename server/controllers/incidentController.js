@@ -131,21 +131,32 @@ Return this JSON format:
       duplicateId = bestDuplicate._id;
     }
 
-    // auto merge logic
+    // AUTO MERGE DUPLICATE
     if (isDuplicate && duplicateId) {
-      await Incident.findByIdAndUpdate(duplicateId, {
-        $push: {
-          relatedReports: {
-            source,
-            rawContent: rawContentBody,
-            cleanSummary: parsed.summary,
-            priority: parsed.priority,
-            createdAt: new Date()
+
+      const mergedIncident = await Incident.findByIdAndUpdate(
+        duplicateId,
+        {
+          $push: {
+            relatedReports: {
+              source,
+              rawContent: rawContentBody,
+              cleanSummary: parsed.summary,
+              priority: parsed.priority,
+              createdAt: new Date()
+            }
           }
-        }
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        message: "Duplicate incident merged successfully",
+        incident: mergedIncident
       });
     }
 
+    // CREATE NEW INCIDENT ONLY IF NOT DUPLICATE
     const newIncident = new Incident({
       source,
       rawContent: rawContentBody,
@@ -171,15 +182,6 @@ Return this JSON format:
       const score = cosineSimilarity(newEmbedding, inc.embedding);
       return score > 0.8;
     });
-
-    // auto merge
-    if (isDuplicate) {
-      await Incident.findByIdAndUpdate(duplicateId, {
-        $push: {
-          relatedReports: rawContentBody
-        }
-      });
-    }
     res.status(201).json({ message: "Incident logged & summarized!", incident: newIncident });
   } catch (err) {
     res.status(500).json({ error: err.message });

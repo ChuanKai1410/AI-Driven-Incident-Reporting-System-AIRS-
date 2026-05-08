@@ -133,6 +133,26 @@ function IncidentDetail() {
           </div>
         </div>
 
+        {incident.relatedReports?.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col mt-6">
+            <div className="px-6 py-4 border-b border-slate-200 bg-indigo-50/50 flex items-center gap-2">
+              <Bot className="h-5 w-5 text-indigo-600" />
+              <h2 className="text-lg font-semibold text-slate-800">Related Reports ({incident.relatedReports.length})</h2>
+            </div>
+            <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
+              {incident.relatedReports.map((report, index) => (
+                <div key={index} className="p-4 bg-slate-50 rounded-lg border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                  <p className="text-sm font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-slate-500" />
+                    {report.source}
+                  </p>
+                  <p className="text-slate-600 text-sm leading-relaxed">{report.cleanSummary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
     </>
