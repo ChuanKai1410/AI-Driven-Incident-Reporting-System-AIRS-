@@ -285,7 +285,7 @@ To link the RPA collector to the web dashboard:
 1.  Open the `rpa-uipath` folder in **UiPath Studio**.
 2.  Open `Main.xaml`.
 3.  Locate the **HTTP Request** activity and ensure the `Request URL` is set to `http://localhost:5000/api/incidents`.
-4.Add the RPA API key in the HTTP Request header:
+4.  Add the RPA API key in the HTTP Request header:
 
 ```txt
 x-api-key: your_rpa_api_key
