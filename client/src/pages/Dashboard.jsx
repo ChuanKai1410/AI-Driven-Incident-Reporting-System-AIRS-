@@ -76,18 +76,63 @@ function Dashboard() {
 
         {/* Cluster Visualization */}
         <div>
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
-            <h3 className="font-semibold text-purple-900">
-              AI Semantic Clustering
-            </h3>
-            <p className="text-sm text-purple-700 mt-1">
-              Incidents are grouped using Gemini embeddings and cosine similarity, allowing the system to detect related operational patterns beyond simple category labels.
-            </p>
+          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-2xl p-6 mb-6">
+            
+            <div className="flex items-start justify-between gap-6">
+              
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  AI Operational Intelligence
+                </h2>
+
+                <p className="text-slate-600 mt-2 max-w-3xl leading-relaxed">
+                  AIRS uses Gemini embeddings and cosine similarity to identify semantically related operational incidents, detect duplicate escalation patterns, and consolidate fragmented reports into centralized operational intelligence clusters.
+                </p>
+              </div>
+
+              <div className="hidden lg:flex items-center justify-center w-20 h-20 rounded-2xl bg-purple-100">
+                <div className="text-3xl">🧠</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+              <div className="bg-white rounded-xl p-4 border border-purple-100">
+                <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">
+                  AI Embedding Engine
+                </p>
+
+                <p className="mt-2 font-bold text-slate-800">
+                  Gemini Embeddings
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl p-4 border border-purple-100">
+                <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">
+                  Similarity Detection
+                </p>
+
+                <p className="mt-2 font-bold text-slate-800">
+                  Cosine Similarity
+                </p>
+              </div>
+
+              <div className="bg-white rounded-xl p-4 border border-purple-100">
+                <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">
+                  Operational Clusters
+                </p>
+
+                <p className="mt-2 font-bold text-slate-800">
+                  {clusters.length} Active AI Clusters
+                </p>
+              </div>
+
+            </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Pie Chart */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center">
-              <h2 className="text-lg font-semibold text-slate-800 mb-4 self-start">Semantic Cluster Distribution</h2>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col items-center hover:shadow-md transition-shadow">
+              <h2 className="text-lg font-semibold text-slate-800 mb-4 self-start">Semantic Operational Pattern Distribution</h2>
             <PieChart width={400} height={300}>
               <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
                 {pieData.map((entry, index) => (
@@ -96,6 +141,39 @@ function Dashboard() {
               </Pie>
               <Tooltip />
             </PieChart>
+            <div className="mt-6 w-full bg-slate-50 border border-slate-200 rounded-xl p-4">
+  
+              <h3 className="font-semibold text-slate-800 mb-3">
+                AI Operational Insights
+              </h3>
+
+              <div className="space-y-3 text-sm text-slate-600">
+
+                <div className="flex items-start gap-2">
+                  <span>⚠️</span>
+                  <p>
+                    {clusters.length > 0
+                      ? `${clusters[0].incidentCount} semantically related incidents detected in the largest operational cluster.`
+                      : "No operational clusters detected."}
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2">
+                  <span>🧠</span>
+                  <p>
+                    AIRS identified operational similarities beyond simple keyword matching using embedding vectors.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2">
+                  <span>🔁</span>
+                  <p>
+                    Duplicate escalation patterns were automatically consolidated into unified operational incidents.
+                  </p>
+                </div>
+
+              </div>
+            </div>
           </div>
 
           {/* Cluster List */}
@@ -115,6 +193,18 @@ function Dashboard() {
                     <p className="text-sm text-slate-500">
                       {cluster.incidentCount} semantically similar incidents detected
                     </p>
+
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        cluster.incidentCount >= 3
+                          ? "bg-red-100 text-red-700"
+                          : "bg-amber-100 text-amber-700"
+                      }`}>
+                        {cluster.incidentCount >= 3
+                          ? "High Operational Risk"
+                          : "Moderate Operational Risk"}
+                      </span>
+                    </div>
                   </div>
 
                   <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
@@ -123,6 +213,15 @@ function Dashboard() {
                 </div>
 
                 <div className="mb-4">
+                  <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-4">
+                    <p className="text-xs uppercase tracking-wide text-indigo-500 font-semibold mb-2">
+                      AI Pattern Insight
+                    </p>
+                    <p className="text-sm text-indigo-800 leading-relaxed">
+                      AIRS detected semantically related operational reports that may indicate repeated process failures, communication gaps, or recurring logistics bottlenecks.
+                    </p>
+                  </div>
+
                   <p className="text-xs text-slate-500 mb-1">Average Similarity</p>
                   <div className="w-full bg-slate-100 rounded-full h-2">
                     <div
