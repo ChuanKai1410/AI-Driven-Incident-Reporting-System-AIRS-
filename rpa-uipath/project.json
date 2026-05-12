@@ -5,6 +5,7 @@
   "main": "Main.xaml",
   "dependencies": {
     "UiPath.System.Activities": "[26.2.1]",
+    "UiPath.UIAutomation.Activities": "[25.10.31]",
     "UiPath.WebAPI.Activities": "[2.4.0]"
   },
   "webServices": [],

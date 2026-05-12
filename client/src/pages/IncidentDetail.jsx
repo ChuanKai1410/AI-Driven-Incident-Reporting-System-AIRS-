@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api';
 import Navbar from '../components/Navbar';
-import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2 } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2, Trash2 } from 'lucide-react';
+import axios from 'axios';
 
 function IncidentDetail() {
   const { id } = useParams();
@@ -40,6 +41,28 @@ function IncidentDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this incident?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/incidents/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+
+      alert("Incident deleted successfully.");
+      navigate("/incidents");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete incident.");
+    }
+  };
+
   if (loading) {
     return <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8 text-slate-500">Loading incident details...</div>;
   }
@@ -74,19 +97,29 @@ function IncidentDetail() {
             </div>
             
             {/* Status Dropdown */}
-            <div className="flex items-center gap-3 bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
-              <span className="text-sm font-medium text-slate-600 pl-2">Status:</span>
-              <select 
-                value={incident.status}
-                onChange={(e) => handleStatusChange(e.target.value)}
-                disabled={updating}
-                className="block pl-3 pr-8 py-1.5 text-sm font-medium bg-slate-50 border border-slate-200 rounded-md focus:ring-2 focus:ring-red-500 disabled:opacity-50 outline-none"
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 bg-white p-2 rounded-lg border border-slate-200 shadow-sm">
+                <span className="text-sm font-medium text-slate-600 pl-2">Status:</span>
+                <select 
+                  value={incident.status}
+                  onChange={(e) => handleStatusChange(e.target.value)}
+                  disabled={updating}
+                  className="block pl-3 pr-8 py-1.5 text-sm font-medium bg-slate-50 border border-slate-200 rounded-md focus:ring-2 focus:ring-red-500 disabled:opacity-50 outline-none"
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+
+              <button
+                onClick={handleDelete}
+                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors shadow-sm"
               >
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </button>
             </div>
           </div>
         </div>
