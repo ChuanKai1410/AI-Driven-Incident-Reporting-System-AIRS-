@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 import Navbar from '../components/Navbar';
+import UploadIncident from '../components/UploadIncident';
 import { Search, List } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -54,6 +55,7 @@ function IncidentList() {
             </h1>
             <p className="text-slate-500 mt-1">Detailed view and filtering of all incidents</p>
           </div>
+          <UploadIncident />
         </div>
 
         {/* Filters & Search */}

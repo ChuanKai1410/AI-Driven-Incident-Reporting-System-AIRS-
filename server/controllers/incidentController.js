@@ -1,5 +1,8 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const Incident = require("../models/Incident");
+const fs = require("fs");
+const pdfParse = require("pdf-parse");
+const mammoth = require("mammoth");
 
 // Initialize Gemini API
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -300,5 +303,45 @@ exports.getClusters = async (req, res) => {
   } catch (err) {
     console.error("Cluster Error:", err.message);
     res.status(500).json({ error: "Failed to fetch semantic clusters" });
+  }
+};
+
+exports.uploadIncidentFile = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    let rawContent = "";
+    const filePath = req.file.path;
+    const originalName = req.file.originalname.toLowerCase();
+
+    if (originalName.endsWith(".txt")) {
+      rawContent = fs.readFileSync(filePath, "utf-8");
+    } 
+    else if (originalName.endsWith(".pdf")) {
+      const dataBuffer = fs.readFileSync(filePath);
+      const pdfData = await pdfParse(dataBuffer);
+      rawContent = pdfData.text;
+    } 
+    else if (originalName.endsWith(".docx")) {
+      const result = await mammoth.extractRawText({ path: filePath });
+      rawContent = result.value;
+    } 
+    else {
+      fs.unlinkSync(filePath);
+      return res.status(400).json({ message: "Unsupported file type" });
+    }
+
+    fs.unlinkSync(filePath);
+
+    req.body.rawContent = rawContent;
+    req.body.source = "Manual Upload";
+
+    return exports.createIncident(req, res);
+
+  } catch (err) {
+    console.error("Upload Error:", err.message);
+    res.status(500).json({ error: "Failed to process uploaded file" });
   }
 };
