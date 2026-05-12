@@ -199,6 +199,7 @@ function Dashboard() {
                     <th className="px-6 py-4 font-medium">Category</th>
                     <th className="px-6 py-4 font-medium">Priority</th>
                     <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium">Created By</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -229,6 +230,9 @@ function Dashboard() {
                         </td>
                         <td className="px-6 py-4">
                           <StatusBadge status={inc.status} />
+                        </td>
+                        <td className="px-6 py-4">
+                          {inc.createdBy || 'Unknown'}
                         </td>
                       </tr>
                     ))

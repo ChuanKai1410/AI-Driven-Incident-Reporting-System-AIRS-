@@ -176,6 +176,7 @@ IMPORTANT:
       category: parsed.category,
       priority: parsed.priority,
       department: parsed.department,
+      createdBy: req.user?.email || "RPA Bot",
       status: 'Pending',
       embedding: newEmbedding,
       isDuplicate,

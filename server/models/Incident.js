@@ -11,6 +11,11 @@ const incidentSchema = new mongoose.Schema({
   priority: String,        // Low, Medium, High, Critical
   department: String,      // Customer Support, Warehouse, Delivery, IT Support
 
+  createdBy: {
+    type: String,
+    default: "Unknown"
+  },
+
   status: { 
     type: String, 
     enum: ['Pending', 'In Progress', 'Resolved', 'Rejected'],

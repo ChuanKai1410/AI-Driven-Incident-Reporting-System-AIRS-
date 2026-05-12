@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api';
 import Navbar from '../components/Navbar';
-import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2, Trash2 } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, FileText, Bot, Tag, ShieldAlert, Building2, Trash2, User } from 'lucide-react';
 import axios from 'axios';
 
 function IncidentDetail() {
@@ -149,6 +149,7 @@ function IncidentDetail() {
           <InfoCard icon={<Tag className="h-5 w-5 text-blue-500" />} label="Category" value={incident.category || 'Uncategorized'} />
           <InfoCard icon={<ShieldAlert className={`h-5 w-5 ${getPriorityColor(incident.priority)}`} />} label="Priority" value={incident.priority || 'Not Set'} />
           <InfoCard icon={<Building2 className="h-5 w-5 text-indigo-500" />} label="Suggested Department" value={incident.department || 'Not Assigned'} />
+          <InfoCard icon={<User className="h-5 w-5 text-slate-500" />} label="Created By" value={incident.createdBy || 'Unknown'} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

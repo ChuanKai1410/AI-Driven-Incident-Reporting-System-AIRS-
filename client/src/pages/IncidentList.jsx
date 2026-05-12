@@ -132,6 +132,7 @@ function IncidentList() {
                     <th className="px-6 py-4 font-medium">Priority</th>
                     <th className="px-6 py-4 font-medium">Department</th>
                     <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium">Created By</th>
                     <th className="px-6 py-4 font-medium">Created At</th>
                   </tr>
                 </thead>
@@ -158,6 +159,9 @@ function IncidentList() {
                         <td className="px-6 py-4">{inc.department || '-'}</td>
                         <td className="px-6 py-4">
                           <StatusBadge status={inc.status} />
+                        </td>
+                        <td className="px-6 py-4 text-slate-500">
+                          {inc.createdBy || '-'}
                         </td>
                         <td className="px-6 py-4 text-slate-500">
                           {new Date(inc.createdAt).toLocaleString()}
