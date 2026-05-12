@@ -189,6 +189,15 @@ Example:
 - Repeated warehouse handling issues
 - Recurring COD disputes
 
+### 📥 AI Incident Intake Console
+Supports TXT, PDF and DOCX upload for AI-powered incident extraction.
+
+### 🧾 RPA Execution Logging
+Includes status checks, error handling, screenshots on failure and execution summary logs.
+
+### 👤 Creator Tracking 
+Tracks whether an incident was created by a logged-in user or the RPA bot.
+
 ---
 
 ## 📸 Screenshots
@@ -196,14 +205,18 @@ Example:
 ### Dashboard
 ![Dashboard](./images/Dashboard.png)
 
-### Incident Details
+### Incident List
 ![IncidentList](./images/IncidentList.png)
 
-### Cluster Visualization
+### Incident Details
 ![IncidentDetails](./images/IncidentDetail.png)
 
 ### UiPath Workflow
-![UiPath](./images/rpa-uipath.png)
+![UiPath1](./images/rpa-uipath1.png)
+![UiPath2](./images/rpa-uipath2.png)
+![UiPath3](./images/rpa-uipath3.png)
+![UiPath4](./images/rpa-uipath4.png)
+![UiPath5](./images/rpa-uipath5.png)
 
 ---
 
@@ -229,10 +242,7 @@ Example:
 ```bash
 git clone https://github.com/your-username/AI-Driven-Incident-Reporting-System-AIRS-.git
 cd AI-Driven-Incident-Reporting-System-AIRS-
-
-## 🛠️ Setup & Installation
-
-### 1\. Repository Setup
+```
 
 ```bash
 git clone https://github.com/your-username/AI-Driven-Incident-Reporting-System-AIRS-.git
@@ -275,7 +285,12 @@ To link the RPA collector to the web dashboard:
 1.  Open the `rpa-uipath` folder in **UiPath Studio**.
 2.  Open `Main.xaml`.
 3.  Locate the **HTTP Request** activity and ensure the `Request URL` is set to `http://localhost:5000/api/incidents`.
-4.  Run the bot to simulate real-world incident ingestion.
+4.Add the RPA API key in the HTTP Request header:
+
+```txt
+x-api-key: your_rpa_api_key
+```
+5.  Run the bot to simulate real-world incident ingestion.
 
 ---
 
