@@ -136,7 +136,7 @@
       <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
     </scg:Dictionary>
   </sap:WorkflowViewStateService.ViewState>
-  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="824.4000000000001,4124" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="824.4,4124" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="x:String" Name="adminEmail">
         <Variable.Default>
@@ -158,7 +158,11 @@
       <Variable x:TypeArguments="x:String" Default="C:\Users\SCSM11\Documents\UTM Y3S2\WT\AI-Driven-Incident-Reporting-System-AIRS-\rpa-uipath\sample-inputs" Name="inputFolder" />
       <Variable x:TypeArguments="x:String" Name="rawContent" />
       <Variable x:TypeArguments="x:String" Name="resContent" />
-      <Variable x:TypeArguments="x:String" Default="airs_rpa_secret_12" Name="apiKey" />
+      <Variable x:TypeArguments="x:String" Name="apiKey">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String">airs_rpa_secret_123</Literal>
+        </Variable.Default>
+      </Variable>
       <Variable x:TypeArguments="x:Int32" Name="statusCode" />
       <Variable x:TypeArguments="x:String" Name="smtpPassword">
         <Variable.Default>
