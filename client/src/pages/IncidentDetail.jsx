@@ -194,53 +194,84 @@ function IncidentDetail() {
         {incident.relatedReports?.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
             
-            <div className="px-6 py-4 border-b border-slate-200 bg-red-50/50">
-              <h2 className="text-lg font-semibold text-slate-800">
-                Related Reports ({incident.relatedReports.length})
-              </h2>
-              <p className="text-sm text-slate-500 mt-1">
-                AI-merged duplicate incident submissions
-              </p>
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-slate-200 bg-purple-50/50 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-800">
+                  Related Reports Timeline
+                </h2>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  Duplicate operational reports consolidated into this incident
+                </p>
+              </div>
+
+              <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
+                {incident.relatedReports.length} Merged Reports
+              </span>
             </div>
 
-            <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+            {/* Timeline */}
+            <div className="p-6 space-y-6">
               {incident.relatedReports.map((report, index) => (
                 <div
                   key={index}
-                  className="p-6 hover:bg-slate-50 transition-colors"
+                  className="relative pl-8 border-l-2 border-purple-200"
                 >
-                  
-                  <div className="flex items-center justify-between mb-3">
-                    
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-slate-800">
-                        #{index + 1}
-                      </span>
+                  {/* Timeline Dot */}
+                  <div className="absolute left-[-9px] top-1 w-4 h-4 bg-purple-500 rounded-full border-4 border-white shadow" />
 
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
-                        {report.source}
+                  {/* Report Card */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 hover:shadow-sm transition-shadow">
+                    
+                    {/* Top Row */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                      
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                          {report.source || "Unknown Source"}
+                        </span>
+
+                        <span className="px-2.5 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">
+                          {report.priority || "Unclassified"}
+                        </span>
+                      </div>
+
+                      <span className="text-xs text-slate-500">
+                        {new Date(report.createdAt).toLocaleString()}
                       </span>
                     </div>
 
-                    <span className="text-xs text-slate-400">
-                      {new Date(report.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-lg p-4">
-                    {Array.isArray(report.cleanSummary) ? (
-                      <ul className="space-y-2 list-disc list-inside text-sm text-slate-700">
-                        {report.cleanSummary.map((point, i) => (
-                          <li key={i} className="leading-relaxed">{point}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
-                        {report.cleanSummary}
+                    {/* Summary */}
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        AI Operational Summary
                       </p>
-                    )}
-                  </div>
 
+                      {Array.isArray(report.cleanSummary) ? (
+                        <ul className="list-disc list-inside space-y-2 text-sm text-slate-700">
+                          {report.cleanSummary.map((point, idx) => (
+                            <li key={idx}>{point}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
+                          {report.cleanSummary}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Raw Content */}
+                    <details className="mt-4">
+                      <summary className="cursor-pointer text-sm text-purple-700 font-medium hover:text-purple-800">
+                        View Raw Report
+                      </summary>
+
+                      <div className="mt-3 bg-white border border-slate-200 rounded-lg p-4 text-xs font-mono text-slate-600 whitespace-pre-wrap max-h-60 overflow-y-auto">
+                        {report.rawContent}
+                      </div>
+                    </details>
+                  </div>
                 </div>
               ))}
             </div>
