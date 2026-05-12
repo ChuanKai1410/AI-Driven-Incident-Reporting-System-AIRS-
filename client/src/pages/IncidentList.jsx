@@ -55,8 +55,9 @@ function IncidentList() {
             </h1>
             <p className="text-slate-500 mt-1">Detailed view and filtering of all incidents</p>
           </div>
-          <UploadIncident />
         </div>
+
+        <UploadIncident />
 
         {/* Filters & Search */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4">
