@@ -52,91 +52,143 @@ The system transforms messy operational data into structured, actionable and tra
 
 ![System Architecture](./images/architecture.png)
 
-The system follows a three-layer architecture:
+AIRS follows a multi-layer intelligent system architecture that combines Robotic Process Automation (RPA), Artificial Intelligence (AI), semantic similarity analysis and a MERN-based operational dashboard into a centralized operational intelligence platform.
 
-### 1. Ingestion Layer (RPA - UiPath)
-UiPath bots automate the collection of raw operational reports from simulated DHL communication channels.
-
-**Responsibilities**
-- Read raw .txt reports
-- Simulate real-world operational channels
-- Convert inputs into API-ready payloads
-- Send incident data to backend API
-
-**Simulated Sources**
-- Customer Emails
-- WhatsApp Complaints
-- Warehouse Notes
-- Support Call Logs
-- Internal Operations Messages
-
-### 2. Intelligence Layer (Backend + AI)
-The intelligence layer is powered by:
-
-- Node.js
-- Express.js
-- Google Gemini AI
-- MongoDB
-
-#### AI Capabilities
-🧠 **AI Summarization**
-
-Transforms messy operational reports into structured incident briefings.
-
-
-🏷️ **Intelligent Classification**
-
-Automatically extracts:
-
-- Category
-- Priority
-- Suggested Department
-
-
-🔍 **Embedding Generation**
-
-Gemini embeddings are generated for semantic understanding.
-
-
-🔁 **Duplicate Detection**
-
-Cosine similarity compares incident embeddings to detect repeated operational cases.
-
-
-🔗 **Automatic Incident Consolidation**
-
-Duplicate incidents are merged into unified tickets with related report tracking.
-
-
-📊 **Semantic Clustering**
-
-Embedding similarity groups related incidents into operational trend clusters.
-
-
-### 3. Management Layer (Frontend - React)
-A secure React dashboard provides centralized incident management and operational intelligence visualization.
-
-**Features**
-- Incident workflow tracking
-- Search and filtering
-- AI-generated summaries
-- Semantic cluster visualization
-- Duplicate incident monitoring
-- Related report consolidation
-- Real-time operational visibility
+The system is designed to automate the full lifecycle of incident reporting, classification, duplicate detection, operational tracking and workflow management.
 
 ---
 
-## 🔄 End-to-End Workflow
+### 1️⃣ Incident Source Layer
 
-1. UiPath ingests raw operational incident data
-2. Backend API receives incident payload
-3. Gemini AI extracts structured operational intelligence
-4. Embeddings are generated for semantic comparison
-5. Cosine similarity identifies related incidents
-6. Duplicate incidents are automatically consolidated
-7. MongoDB stores structured operational records
-8. React dashboard visualizes incidents and AI clusters
+Operational reports originate from multiple fragmented communication channels including:
+
+- Customer Emails
+- WhatsApp Complaints
+- Support Call Logs
+- Internal Operational Messages
+- Warehouse Handwritten Notes
+- Uploaded TXT / PDF / DOCX Files
+
+These reports are often inconsistent and unstructured, requiring automated consolidation and processing.
+
+---
+
+### 2️⃣ RPA Automation Layer (UiPath)
+
+The UiPath automation workflow handles intelligent incident intake and workflow automation.
+
+Functions include:
+
+- Read operational incident files
+- Extract raw operational content
+- Validate JSON payload structure
+- API authentication verification
+- Error handling and retry logic
+- Screenshot capture during failures
+- Execution logging and processing summaries
+- Send structured incident payloads to backend API
+
+This layer automates the operational incident collection process without manual intervention.
+
+---
+
+### 3️⃣ AI Intelligence & Backend Layer
+
+#### 🔹 Backend API (Node.js + Express.js)
+
+The backend server acts as the central communication bridge between the RPA workflow, Gemini AI and MongoDB database.
+
+Core functions:
+
+- Incident CRUD operations
+- JWT authentication and authorization
+- Upload processing
+- Workflow status management
+- RPA API validation
+- Dashboard integration
+
+---
+
+#### 🔹 AI Intelligence Engine (Google Gemini AI)
+
+Google Gemini AI is integrated to transform fragmented operational reports into structured operational intelligence.
+
+AI capabilities include:
+
+- AI summarization
+- Point-form operational briefings
+- Intelligent classification
+- Priority detection
+- Department recommendation
+- Incident title generation
+- Operational reasoning generation
+
+---
+
+#### 🔹 Semantic Intelligence Engine
+
+AIRS uses Gemini embeddings and cosine similarity analysis to identify operational similarities beyond traditional keyword matching.
+
+Functions include:
+
+- Duplicate incident detection
+- Semantic similarity comparison
+- Automatic duplicate consolidation
+- Related report merging
+- Operational clustering
+- Pattern recognition analysis
+
+---
+
+#### 🔹 Database Layer (MongoDB Atlas)
+
+MongoDB Atlas stores all centralized operational intelligence data including:
+
+- Incident records
+- Related merged reports
+- Embedding vectors
+- Workflow statuses
+- User authentication data
+- Operational metadata
+
+---
+
+### 4️⃣ Management & Visualization Layer
+
+The frontend dashboard is developed using React.js and Tailwind CSS.
+
+Features include:
+
+- JWT-secured login system
+- Incident dashboard overview
+- Incident list management
+- Incident detail visualization
+- Workflow status tracking
+- Semantic cluster visualization
+- Related reports timeline
+- Upload console
+- Search and filtering
+- Operational risk indicators
+
+The dashboard provides centralized operational visibility for DHL support teams.
+
+---
+
+## 🔄 System End-to-End Workflow Summary
+
+The AIRS operational workflow is executed as follows:
+
+1. Operational reports are collected from multiple communication channels
+2. UiPath RPA extracts and validates incident content
+3. Structured JSON payloads are sent to the backend API
+4. Google Gemini AI analyzes and summarizes operational reports
+5. Embeddings are generated for semantic similarity analysis
+6. Cosine similarity detects semantically related incidents
+7. Duplicate incidents are automatically consolidated
+8. MongoDB stores centralized operational intelligence
+9. React dashboard visualizes incidents, clusters and workflow statuses
+
+This architecture enables AIRS to transform fragmented operational reports into centralized AI-powered operational intelligence.
 
 ---
 
